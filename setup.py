@@ -1,6 +1,5 @@
 from setuptools import find_packages, setup
 
-
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -15,7 +14,7 @@ setup(
     url="https://github.com/FoundationAgents/OpenManus",
     packages=find_packages(),
     install_requires=[
-        "pydantic~=2.10.4",
+        "pydantic~=2.13.4",
         "openai>=1.58.1,<1.67.0",
         "tenacity~=9.0.0",
         "pyyaml~=6.0.2",
@@ -31,7 +30,7 @@ setup(
         "browser-use~=0.1.40",
         "googlesearch-python~=1.3.0",
         "aiofiles~=24.1.0",
-        "pydantic_core>=2.27.2,<2.28.0",
+        "pydantic_core～=2.46.0",
         "colorama~=0.4.6",
     ],
     classifiers=[

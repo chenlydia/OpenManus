@@ -9,10 +9,8 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from app.config import config
 from app.logger import logger
 from app.tool.base import BaseTool, ToolResult
-from app.tool.search import (
-    BaiduSearchEngine,
+from app.tool.search import (  # BaiduSearchEngine,; DuckDuckGoSearchEngine,
     BingSearchEngine,
-    DuckDuckGoSearchEngine,
     GoogleSearchEngine,
     WebSearchEngine,
 )
@@ -192,8 +190,8 @@ class WebSearch(BaseTool):
     }
     _search_engine: dict[str, WebSearchEngine] = {
         "google": GoogleSearchEngine(),
-        "baidu": BaiduSearchEngine(),
-        "duckduckgo": DuckDuckGoSearchEngine(),
+        # "baidu": BaiduSearchEngine(),
+        # "duckduckgo": DuckDuckGoSearchEngine(),
         "bing": BingSearchEngine(),
     }
     content_fetcher: WebContentFetcher = WebContentFetcher()

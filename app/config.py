@@ -39,7 +39,7 @@ class ProxySettings(BaseModel):
 class SearchSettings(BaseModel):
     engine: str = Field(default="Google", description="Search engine the llm to use")
     fallback_engines: List[str] = Field(
-        default_factory=lambda: ["DuckDuckGo", "Baidu", "Bing"],
+        default_factory=lambda: ["Bing"],
         description="Fallback search engines to try if the primary engine fails",
     )
     retry_delay: int = Field(
@@ -294,7 +294,9 @@ class Config:
         if daytona_config:
             daytona_settings = DaytonaSettings(**daytona_config)
         else:
-            daytona_settings = DaytonaSettings()
+            # 代码有坑，daytona_config为空时，会报错
+            daytona_settings = None
+            # daytona_settings = DaytonaSettings()
 
         mcp_config = raw_config.get("mcp", {})
         mcp_settings = None

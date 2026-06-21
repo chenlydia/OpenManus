@@ -11,15 +11,17 @@ from app.tool.base import BaseTool
 from app.utils.files_utils import clean_path
 from app.utils.logger import logger
 
-
 # load_dotenv()
-daytona_settings = config.daytona
-daytona_config = DaytonaConfig(
-    api_key=daytona_settings.daytona_api_key,
-    server_url=daytona_settings.daytona_server_url,
-    target=daytona_settings.daytona_target,
-)
-daytona = Daytona(daytona_config)
+if config.daytona:
+    daytona_settings = config.daytona
+    daytona_config = DaytonaConfig(
+        api_key=daytona_settings.daytona_api_key,
+        server_url=daytona_settings.daytona_server_url,
+        target=daytona_settings.daytona_target,
+    )
+    daytona = Daytona(daytona_config)
+else:
+    daytona = None
 
 
 @dataclass

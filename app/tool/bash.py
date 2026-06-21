@@ -5,7 +5,6 @@ from typing import Optional
 from app.exceptions import ToolError
 from app.tool.base import BaseTool, CLIResult
 
-
 _BASH_DESCRIPTION = """Execute a bash command in the terminal.
 * Long running commands: For commands that may run indefinitely, it should be run in the background and the output should be redirected to a file, e.g. command = `python3 app.py > server.log 2>&1 &`.
 * Interactive: If a bash command returns exit code `-1`, this means the process is not yet finished. The assistant must then send a second call to terminal with an empty `command` (which will retrieve any additional logs), or it can send additional text (set `command` to the text) to STDIN of the running process, or it can send command=`ctrl+c` to interrupt the process.
@@ -70,6 +69,13 @@ class _BashSession:
         assert self._process.stdin
         assert self._process.stdout
         assert self._process.stderr
+
+        # 新增：拦截rmdir、rm等命令，防止删除重要文件
+        if command.lower().find("rmdir") != -1 and command.lower().find("rm") != -1:
+            return CLIResult(
+                output=f"include rmdir and rm commands, tool is skipped. Command: {command}",
+                error=None,
+            )
 
         # send command to the process
         self._process.stdin.write(
