@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any, ClassVar, Dict, Optional
 
 from daytona import Daytona, DaytonaConfig, Sandbox, SandboxState
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from app.config import config
 from app.daytona.sandbox import create_sandbox, start_supervisord_session
@@ -53,22 +53,23 @@ class SandboxToolsBase(BaseTool):
     """Base class for all sandbox tools that provides project-based sandbox access."""
 
     # Class variable to track if sandbox URLs have been printed
-    _urls_printed: ClassVar[bool] = False
+    _urls_printed: ClassVar[bool] = PrivateAttr(default=False)
 
     # Required fields
     project_id: Optional[str] = None
     # thread_manager: Optional[ThreadManager] = None
 
     # Private fields (not part of the model schema)
-    _sandbox: Optional[Sandbox] = None
-    _sandbox_id: Optional[str] = None
-    _sandbox_pass: Optional[str] = None
+    _sandbox: Optional[Sandbox] = PrivateAttr(default=None)
+    _sandbox_id: Optional[str] = PrivateAttr(default=None)
+    _sandbox_pass: Optional[str] = PrivateAttr(default=None)
     workspace_path: str = Field(default="/workspace", exclude=True)
-    _sessions: dict[str, str] = {}
+    _sessions: dict[str, str] = PrivateAttr(default={})
 
     class Config:
         arbitrary_types_allowed = True  # Allow non-pydantic types like ThreadManager
-        underscore_attrs_are_private = True
+        # pydantic V2用PrivateAttr显示定义单个私有属性，从V1迁移到V2时，主要要同步修改本类的子类的私有属性
+        # underscore_attrs_are_private = True
 
     async def _ensure_sandbox(self) -> Sandbox:
         """Ensure we have a valid sandbox instance, retrieving it from the project if needed."""
